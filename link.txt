@@ -1,2 +1,2 @@
-https://realpython.com/how-to-make-a-discord-bot-python/
-
+https://realpython.com/how-to-make-a-discord-bot-python/ #how to start
+https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID- #how to find ch id
