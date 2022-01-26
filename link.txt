@@ -1,2 +1,5 @@
 https://realpython.com/how-to-make-a-discord-bot-python/ #how to start
 https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID- #how to find ch id
+https://emojipedia.org/
+https://discordpy.readthedocs.io/en/latest/intents.html#privileged-intents
+I have fixed the problem. I wasn't using the guild from the given context, instead I used the guild which I initialized on startup and never updated, so my guess is that I was using outdated guild information when retrieving things like channels and nicknames.
