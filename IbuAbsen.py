@@ -45,7 +45,7 @@ async def on_message(message):
         else:
             await message.channel.send('Ni pada kemana yak!')
     elif message.content == 'pagi bu':
-        response = 'Selamat pagi  ' + str(message.author) + '🥰🥰🥰'
+        response = 'Selamat pagi  ' + str(message.author) + ' 🥰🥰🥰'
         print(str(message.author) + "say hi")
         await message.channel.send(response)
     elif message.content == 'ibu cantik deh':
@@ -65,7 +65,7 @@ async def on_message(message):
         for member in channel.members:
             await member.edit(mute=False)
             print("Muted member", member)
-        await message.channel.send('Ia silakan mau tanya apa?')
+        await message.channel.send('Ia silakan yang mau tanya?')
 
     elif message.content == 'raise-exception':
         raise discord.DiscordException        
