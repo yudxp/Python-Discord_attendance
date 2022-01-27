@@ -35,7 +35,7 @@ async def on_message(message):
         return
     elif message.content == 'absen bu':
         names = list()
-        channel = client.get_channel(713297992680996954)#934690619559936024
+        channel = client.get_channel(713296831651643404)#934690619559936024
         #print(str(channel))
         if channel.members:
             for member in channel.members:
@@ -54,14 +54,14 @@ async def on_message(message):
         await message.channel.send(response)
     elif message.content == 'berisik bu':
         names = list()
-        channel = client.get_channel(713297992680996954)
+        channel = client.get_channel(713296831651643404)
         for member in channel.members:
             await member.edit(mute=True)
             print("Muted member", member)
         await message.channel.send("Diam ya anak-anak 😡😡😡 !!!")
     elif message.content == 'nanya bu':
         names = list()
-        channel = client.get_channel(713297992680996954)
+        channel = client.get_channel(713296831651643404)
         for member in channel.members:
             await member.edit(mute=False)
             print("Muted member", member)
@@ -79,7 +79,3 @@ async def on_resumed():
     print('Bot reconnected')
 
 client.run(TOKEN)
-
-    # with open(filename, 'w') as file:
-    #     for member in channel.members:
-    #         file.write(member.name + '\n')

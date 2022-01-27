@@ -12,25 +12,20 @@ intents.members = True
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-client = commands.Bot(intents=intents, command_prefix='!')
+bot = commands.Bot(intents=intents, command_prefix='bu ')
 
 
-#load default setting
-#summon ibu 
-#setting siapa aja yg ga di mute pas woe
-#setting lagu apa yg maou di play
 
-
-@client.event
+@bot.event
 async def on_ready():
-    guild = discord.utils.get(client.guilds, name=GUILD)
+    guild = discord.utils.get(bot.guilds, name=GUILD)
     print(
-        f'{client.user} is connected to the following guild:\n'
+        f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
 
-@client.command()
+@bot.command()
 async def play(ctx, url : str):
     song_there = os.path.isfile("song.mp3")
     try:
@@ -42,7 +37,7 @@ async def play(ctx, url : str):
 
     voiceChannel = discord.utils.get(ctx.guild.voice_channels, id=713297992680996954)
     await voiceChannel.connect()
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
 
     ydl_opts = {
         'format': 'bestaudio/best',
@@ -59,38 +54,63 @@ async def play(ctx, url : str):
             os.rename(file, "song.mp3")
     voice.play(discord.FFmpegPCMAudio("song.mp3"))
 
-@client.command()
+@bot.command()
 async def pulang(ctx):
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
     if voice.is_connected():
         await voice.disconnect()
     else:
-        await ctx.send("Ibu pulang dulu ya ..")
+        await ctx.voice.send("Ibu pulang dulu ya ..")
 
-@client.command()
+@bot.command()
 async def absen(ctx):
         names = list()
-        channel = client.get_channel(713297992680996954)#934690619559936024
+        channel = bot.get_channel(713297992680996954)#934690619559936024#713296831651643404
         #play('https://www.youtube.com/watch?v=dNQs_Bef_V8')
         #print(str(channel))
         if channel.members:
             for member in channel.members:
                 #print(f'{member.name} !!!')
                 names.append(f'{member.name}')
-            await absen.channel.send('Yang hadir: '+'\n'.join(names))
+            await ctx.channel.send('Yang hadir: '+'\n'.join(names))
         else:
-            await absen.channel.send('Sepi bener')
+            await ctx.channel.send('Sepi bener')
 
-@client.event
+@bot.command()
+async def mute(ctx):
+        channel = bot.get_channel(713297992680996954)
+        for member in channel.members:
+            await member.edit(mute=True)
+            print("Muted member", member)
+        await ctx.send("Diam ya anak-anak 😡😡😡 !!!")
+
+@bot.command()
+async def unmute(ctx):
+        channel = bot.get_channel(713297992680996954)
+        for member in channel.members:
+            await member.edit(mute=False)
+            print("Muted member", member)
+        await ctx.send("Monggo ngomong!")
+
+@bot.command()
+async def laper(ctx,arg):
+    if arg=="laper":
+        await ctx.send("Makan lah anjir!")
+
+# @bot.command()
+# async def bacot(ctx):
+#     voiceChannel = discord.utils.get(ctx.guild.voice_channels, id=713297992680996954)
+#     await voiceChannel.connect()
+#     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+#     voice.play(discord.FFmpegPCMAudio("bacot.mp3"))
+#     await ctx.author.kick(reason="bacooot")
+
+@bot.event
 async def on_disconnect():
     print('Bot disconnected')
 
-@client.event
+@bot.event
 async def on_resumed():
     print('Bot reconnected')
 
-client.run(TOKEN)
-
-    # with open(filename, 'w') as file:
-    #     for member in channel.members:
-    #         file.write(member.name + '\n')
+bot.run(TOKEN)
