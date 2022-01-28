@@ -58,6 +58,7 @@ async def play(ctx, url : str):
 async def pulang(ctx):
     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
     if voice.is_connected():
+        voice.cleanup()
         await voice.disconnect()
     else:
         await ctx.voice.send("Ibu pulang dulu ya ..")
@@ -103,7 +104,27 @@ async def laper(ctx,arg):
 #     await voiceChannel.connect()
 #     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
 #     voice.play(discord.FFmpegPCMAudio("bacot.mp3"))
-#     await ctx.author.kick(reason="bacooot")
+#     await ctx.author.edit(voice_channel=None)
+
+@bot.command()
+async def bacot(ctx):
+    voiceChannel = discord.utils.get(ctx.guild.voice_channels)
+    voiceChannel.connect()
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice.is_connected():
+        voice.play(discord.FFmpegPCMAudio("bacot.mp3"))
+        await ctx.author.edit(voice_channel=None)
+    else :
+        print("err")
+
+
+
+@bot.command()
+async def senam(ctx):
+    voiceChannel = discord.utils.get(ctx.guild.voice_channels)
+    await voiceChannel.connect()
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    voice.play(discord.FFmpegPCMAudio("senam.mp3"))
 
 @bot.event
 async def on_disconnect():
@@ -114,3 +135,6 @@ async def on_resumed():
     print('Bot reconnected')
 
 bot.run(TOKEN)
+
+
+#ada role Crimsonites, scout, admin (di ch woe/woc auto mute kecuali scout + admin + owner)
