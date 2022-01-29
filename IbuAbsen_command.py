@@ -26,105 +26,113 @@ async def on_ready():
 
 
 @bot.command()
-async def play(ctx, url : str):
-    song_there = os.path.isfile("song.mp3")
-    try:
-        if song_there:
-            os.remove("song.mp3")
-    except PermissionError:
-        await ctx.send("Wait for the current playing music to end or use the 'stop' command")
-        return
-
-    voiceChannel = discord.utils.get(ctx.guild.voice_channels, id=713297992680996954)
-    await voiceChannel.connect()
-    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-    for file in os.listdir("./"):
-        if file.endswith(".mp3"):
-            os.rename(file, "song.mp3")
-    voice.play(discord.FFmpegPCMAudio("song.mp3"))
-
-@bot.command()
 async def pulang(ctx):
     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    if voice.is_connected():
-        voice.cleanup()
+    if voice and voice.is_connected():
         await voice.disconnect()
     else:
         await ctx.voice.send("Ibu pulang dulu ya ..")
 
 @bot.command()
 async def absen(ctx):
-        names = list()
-        channel = bot.get_channel(713297992680996954)#934690619559936024#713296831651643404
-        #play('https://www.youtube.com/watch?v=dNQs_Bef_V8')
-        #print(str(channel))
-        if channel.members:
-            for member in channel.members:
-                #print(f'{member.name} !!!')
-                names.append(f'{member.name}')
-            await ctx.channel.send('Yang hadir: '+'\n'.join(names))
-        else:
-            await ctx.channel.send('Sepi bener')
-
-@bot.command()
-async def mute(ctx):
-        channel = bot.get_channel(713297992680996954)
+    names = list()
+    channel = ctx.message.author.voice.channel
+    if channel.members:
         for member in channel.members:
-            await member.edit(mute=True)
-            print("Muted member", member)
-        await ctx.send("Diam ya anak-anak 😡😡😡 !!!")
+            #print(f'{member.name} !!!')
+            names.append(f'{member.nick}')
+        await ctx.channel.send('Absen '+f'{ctx.message.created_at}'+'\n'+'\n'.join(names))
+    else:
+        await ctx.channel.send('Sepi bener')
 
 @bot.command()
-async def unmute(ctx):
-        channel = bot.get_channel(713297992680996954)
-        for member in channel.members:
-            await member.edit(mute=False)
-            print("Muted member", member)
-        await ctx.send("Monggo ngomong!")
-
-@bot.command()
-async def laper(ctx,arg):
-    if arg=="laper":
-        await ctx.send("Makan lah anjir!")
-
-# @bot.command()
-# async def bacot(ctx):
-#     voiceChannel = discord.utils.get(ctx.guild.voice_channels, id=713297992680996954)
-#     await voiceChannel.connect()
-#     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-#     voice.play(discord.FFmpegPCMAudio("bacot.mp3"))
-#     await ctx.author.edit(voice_channel=None)
+async def laper(ctx):
+    await ctx.send("Makan lah anjir!")
 
 @bot.command()
 async def bacot(ctx):
-    voiceChannel = discord.utils.get(ctx.guild.voice_channels)
-    voiceChannel.connect()
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    if voice.is_connected():
-        voice.play(discord.FFmpegPCMAudio("bacot.mp3"))
-        await ctx.author.edit(voice_channel=None)
-    else :
-        print("err")
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+    voice.play(discord.FFmpegPCMAudio("bacot.mp3"))   
+    for member in channel.members:
+        await member.edit(mute=True)
+        print("Muted member", member)
+    await ctx.send("Diam ya anak-anak 😡😡😡 !!!")
 
+@bot.command()
+async def unmute(ctx):
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+    for member in channel.members:
+        await member.edit(mute=False)
+        print("Muted member", member)
+    await ctx.send("Silakan yang mau bertanya !!!")
 
+@bot.command()
+async def ara(ctx):
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+    voice.play(discord.FFmpegPCMAudio("ara_ara.mp3"))
 
 @bot.command()
 async def senam(ctx):
-    voiceChannel = discord.utils.get(ctx.guild.voice_channels)
-    await voiceChannel.connect()
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
     voice.play(discord.FFmpegPCMAudio("senam.mp3"))
+
+@bot.command()
+async def sini(ctx):
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+    voice.play(discord.FFmpegPCMAudio("ada_ibu.mp3"))
+
+@bot.command()
+async def galau(ctx):
+    channel = ctx.message.author.voice.channel
+    if not channel:
+        await ctx.send("You are not in voice channel")
+        return
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+    voice.play(discord.FFmpegPCMAudio("memikirkan_dia.mp3"))
 
 @bot.event
 async def on_disconnect():
