@@ -60,7 +60,7 @@ async def bacot(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio("bacot.mp3"))   
+    voice.play(discord.FFmpegPCMAudio("audio/bacot.mp3"))   
     for member in channel.members:
         await member.edit(mute=True)
         print("Muted member", member)
@@ -93,7 +93,7 @@ async def ara(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio("ara_ara.mp3"))
+    voice.play(discord.FFmpegPCMAudio("audio/ara_ara.mp3"))
 
 @bot.command()
 async def senam(ctx):
@@ -106,7 +106,7 @@ async def senam(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio("senam.mp3"))
+    voice.play(discord.FFmpegPCMAudio("audio/senam.mp3"))
 
 @bot.command()
 async def sini(ctx):
@@ -119,7 +119,7 @@ async def sini(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio("ada_ibu.mp3"))
+    voice.play(discord.FFmpegPCMAudio("audio/ada_ibu.mp3"))
 
 @bot.command()
 async def galau(ctx):
@@ -132,7 +132,7 @@ async def galau(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio("memikirkan_dia.mp3"))
+    voice.play(discord.FFmpegPCMAudio("audio/memikirkan_dia.mp3"))
 
 @bot.event
 async def on_disconnect():
