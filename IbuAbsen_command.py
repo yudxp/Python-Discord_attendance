@@ -3,18 +3,45 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import youtube_dl
+import mysql.connector
+import re
+
+#for cache the member, so it's realtime
 intents = discord.Intents.default()
 intents.members = True
 
 
-
+#load data from dotenv file just make .env file filled with your credential
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 bot = commands.Bot(intents=intents, command_prefix='bu ')
+#load mysql setting
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_pass = os.getenv('DB_PASS')
+db_database = os.getenv('DB_DATABASE')
+mydb = mysql.connector.connect(
+  host=db_host,
+  user=db_user,
+  password=db_pass,
+  database=db_database
+)
 
+# print(mydb)
 
+# async def absen_db(anggota):
+#     mycursor = mydb.cursor()
+#     names = list()
+#     for x in anggota:
+#         temp = tuple(re.split('\| |-',x))
+#         names.append(temp)
+#     sql = "INSERT INTO customers (party, ign, status) VALUES (%s, %s, %s)"
+#     print(names)
+#     mycursor.executemany(sql, names)
+#     mydb.commit()
+#     print(mycursor.rowcount, "was inserted.")
+#     return
 
 @bot.event
 async def on_ready():
@@ -33,15 +60,36 @@ async def pulang(ctx):
     else:
         await ctx.voice.send("Ibu pulang dulu ya ..")
 
+# @bot.command()
+# async def absen(ctx):
+#     names = list()
+#     channel = ctx.message.author.voice.channel
+#     if channel.members:
+#         for member in channel.members:
+#             names.append(f'{member.nick}')
+#         await ctx.channel.send('Yang hadir: f'{ctx.message.created_at}'\n'+'\n'.join(names))    
+#     else:
+#         await ctx.channel.send('Sepi bener')
+
 @bot.command()
 async def absen(ctx):
     names = list()
+    name_parse = list()
     channel = ctx.message.author.voice.channel
     if channel.members:
         for member in channel.members:
-            #print(f'{member.name} !!!')
             names.append(f'{member.nick}')
-        await ctx.channel.send('Absen '+f'{ctx.message.created_at}'+'\n'+'\n'.join(names))
+        await ctx.channel.send('Yang hadir: '+ str(len(names)) +'\n'+'\n'.join(names)) 
+        mycursor = mydb.cursor()
+        for x in names:
+            #temp = tuple(re.split('\| |-',x))
+            temp = tuple(re.split('\| |-',x))
+            name_parse.append(temp)
+        sql = "INSERT INTO absen (party, ign) VALUES (%s, %s)"
+        print(name_parse)
+        mycursor.executemany(sql, name_parse)
+        mydb.commit()
+        print(mycursor.rowcount, "was inserted.")   
     else:
         await ctx.channel.send('Sepi bener')
 

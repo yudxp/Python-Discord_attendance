@@ -39,7 +39,6 @@ async def on_message(message):
         #print(str(channel))
         if channel.members:
             for member in channel.members:
-                #print(f'{member.name} !!!')
                 names.append(f'{member.name}')
             await message.channel.send('Yang hadir: '+'\n'.join(names))
         else:

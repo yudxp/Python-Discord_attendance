@@ -3,16 +3,4 @@ https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User
 https://emojipedia.org/
 https://discordpy.readthedocs.io/en/latest/intents.html#privileged-intents
 I have fixed the problem. I wasn't using the guild from the given context, instead I used the guild which I initialized on startup and never updated, so my guess is that I was using outdated guild information when retrieving things like channels and nicknames.
-
-
-
-
-
-
-
-
-
-
-
-
-https://github.com/ytdl-org/youtube-dl
+https://stackoverflow.com/questions/4998629/split-string-with-multiple-delimiters-in-python
